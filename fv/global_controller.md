@@ -72,9 +72,11 @@ These are assumptions used to aid the proof goals.
 
 We are currently working on getting the global controller from the [gc\_verif](https://github.com/StanfordAHA/CGRAGenerator/tree/gc\_verif) branch along with the rest of the CGRA into [CoSA](https://github.com/cristian-mattarei/CoSA) properly.
 
+For scaling reasons, we are starting with a 4x4 fabric instead of a 16x16.
+
 #### Properties
 
-* *config_check_pe*: Check that writing a configuration to a PE tile, then reading the configuration matches up.
+* *config_check_pe*: Check that writing a configuration to a particular PE tile (tile_addr = 0x7), then reading the configuration matches up.
    * `assert property ((((global_controller.op == global_controller.write_config) && (global_controller.state == global_controller.ready)) ##2 (((global_controller.op == global_controller.read_config) && (global_controller.state == global_controller.ready)) && (config_addr_in == $past(config_addr_in, 2)))) |-> ##6 config_read |-> (config_data_jtag_in == $past(config_data_in, 8)));`
    * **PROVEN**
    * This proof relies on the following assumptions:
