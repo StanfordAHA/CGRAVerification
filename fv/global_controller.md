@@ -71,3 +71,12 @@ These are assumptions used to aid the proof goals.
 ### [In Progress] Connected to Fabric
 
 We are currently working on getting the global controller from the [gc\_verif](https://github.com/StanfordAHA/CGRAGenerator/tree/gc\_verif) branch along with the rest of the CGRA into [CoSA](https://github.com/cristian-mattarei/CoSA) properly.
+
+#### Properties
+
+* *config_check_pe*: Check that writing a configuration to a PE tile, then reading the configuration matches up.
+   * `assert property ((((global_controller.op == global_controller.write_config) && (global_controller.state == global_controller.ready)) ##2 (((global_controller.op == global_controller.read_config) && (global_controller.state == global_controller.ready)) && (config_addr_in == $past(config_addr_in, 2)))) |-> ##6 config_read |-> (config_data_jtag_in == $past(config_data_in, 8)));`
+   * **PROVEN**
+   * This proof relies on the following assumptions:
+      * rd_delay_2: The read delay register is always equal to 2 (i.e. not letting user set a different read delay value).
+      * clk_active: Not doing the operations when the CGRA is stalled or switching clock domains
